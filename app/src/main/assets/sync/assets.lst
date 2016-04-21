@@ -1,14 +1,9 @@
-cmudict-en-us.dict
-digits.gram
-en-phone.dmp
-menu.gram
-ml-in-acoustic/README
 ml-in-acoustic/feat.params
 ml-in-acoustic/mdef
 ml-in-acoustic/means
 ml-in-acoustic/mixture_weights
 ml-in-acoustic/noisedict
-ml-in-acoustic/sendump
 ml-in-acoustic/transition_matrices
 ml-in-acoustic/variances
-weather.dmp
+samsaaram.arpa
+samsaaram.dic
