@@ -19,12 +19,30 @@
         android:textSize="@dimen/textview_instruction"
         android:textStyle="bold" />
 
-    <ImageView
+
+    <!-- RED IMAGE BUTTON -->
+    <ImageButton
+        android:id="@+id/samsaaramIconTouched"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:onClick="stopRecognition"
+        android:clickable="true"
+        android:src="@drawable/samsaaram_icon_touched"
+        android:contentDescription="@string/stop_recognition_button" />
+
+    <!-- VIOLET IMAGE BUTTON -->
+    <ImageButton
         android:id="@+id/samsaaramIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/samsaaram_icon"/>
-
+        android:background="@null"
+        android:onClick="onSamsaaramIconClick"
+        android:clickable="true"
+        android:src="@drawable/samsaaram_icon"
+        android:contentDescription="@string/start_recognition_button" />
 </RelativeLayout>
