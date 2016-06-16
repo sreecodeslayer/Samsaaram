@@ -26,9 +26,9 @@ import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
 
 public class MainActivity extends AppCompatActivity implements RecognitionListener {
 
-    private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
-    public static final int MY_PERMISSIONS_REQUEST_EXTERNAL_WRITE_ACCESS = 1;
+
     private static final String SAMSAARAM = "samsaaram";
+
     ImageButton violetImageButton;
     ImageButton redImageButton;
     TextView messageTextView;
@@ -55,14 +55,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         IMPLEMENTATION OF ASyncTask to handle intensive Decoder Configuration
         ******************************************************************************************************
         */
-
         new AsyncTask<Void, Void, Exception>() {
-            @Override
-            protected void onPreExecute() {
-                // toast for decoder set
-                toastMe(R.string.setting_decoder);
-            }
-
             @Override
             protected Exception doInBackground(Void... params) {
                 try {
@@ -82,19 +75,13 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             @Override
             protected void onPostExecute(final Exception result) {
 
+                toaster("DECODER COFIGURED, YOU MAY BEGIN");
                 // show error (if any)
                 if (result != null) {
                     ((TextView) findViewById(R.id.caption_text))
                             .setText(R.string.failed_init_recognizer);
-
-                    runOnUiThread(new Runnable() {
-
-                        public void run() {
-
-                            Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
-
-                        }
-                    }); // debug toast, no bug here.
+                } else {
+                    ((TextView) findViewById(R.id.caption_text)).setVisibility(View.INVISIBLE);
                 }
             }
         }.execute();
@@ -107,14 +94,11 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         recognizer.shutdown();
     }
 
-    private void toastMe(int toastMessage) {
-        Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+    private void toaster(String message){
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
     }
-
     public void onSamsaaramStopIconClicked(View v) {
-
         //Handle stop recognition here
-        toastMe(R.string.stop_toast_message);
         redImageButton.setVisibility(View.INVISIBLE); // hide the stopper button by showing the starter button
         violetImageButton.setVisibility(View.VISIBLE);
         messageTextView.setText(R.string.start_message);
@@ -123,12 +107,15 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 
     public void onSamsaaramStartIconClicked(View v) {
         //Handle start recognition here
-        recognizer.stop();
-        toastMe(R.string.start_toast_message);
         violetImageButton.setVisibility(View.INVISIBLE); //hide the starter button by showing the stopper button
         redImageButton.setVisibility(View.VISIBLE);
         messageTextView.setText(R.string.stop_message);
-        recognizer.startListening(SAMSAARAM,10000); // there is a bug here, but what the hell is it! o.O
+        if(recognizer.startListening(SAMSAARAM)){
+            toaster("TRUE");// there is a bug here, but what the hell is it! o.O
+        }
+        else {
+            toaster("FALSE");
+        }
 
         // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
     }
@@ -162,26 +149,16 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 
     @Override
     public void onError(Exception e) {
+        ((TextView) findViewById(R.id.caption_text)).setText(e.getMessage());
     }
 
     @Override
     public void onTimeout() {
-
     }
-
 
     public void setupRecognizer(File assetsDir) throws IOException {
         // The recognizer can be configured to perform multiple searches
         // of different kind and switch between them
-
-        runOnUiThread(new Runnable() {
-
-            public void run() {
-
-                Toast.makeText(getApplicationContext(), "setupRecognizer : 1", Toast.LENGTH_SHORT).show();
-
-            }
-        });
         recognizer = defaultSetup()
                 .setAcousticModel(new File(assetsDir, "ml-in-acoustic"))
                 .setDictionary(new File(assetsDir, "samsaaram.dic"))
@@ -196,11 +173,6 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 .setBoolean("-allphone_ci", true)
                 .getRecognizer();
         recognizer.addListener(this);
-
-        /** In your application you might not need to add all those searches.
-         * They are added here for demonstration. You can leave just one.
-         */
-
         // Create language model search
         File languageModel = new File(assetsDir, "samsaaram.arpa");
         recognizer.addNgramSearch(SAMSAARAM, languageModel);
