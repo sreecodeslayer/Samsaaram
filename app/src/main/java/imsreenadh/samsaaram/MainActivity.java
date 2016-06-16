@@ -1,6 +1,7 @@
 package imsreenadh.samsaaram;
 
 //Android imports
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,22 +11,24 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-// Java imports
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 
-
-// CMU PocketSphinx based Imports
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.Hypothesis;
 import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
+
 import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
+
+// Java imports
+// CMU PocketSphinx based Imports
 
 public class MainActivity extends AppCompatActivity implements RecognitionListener {
 
+    private static final int MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 1;
+    public static final int MY_PERMISSIONS_REQUEST_EXTERNAL_WRITE_ACCESS = 1;
+    private static final String SAMSAARAM = "samsaaram";
     ImageButton violetImageButton;
     ImageButton redImageButton;
     TextView messageTextView;
@@ -91,15 +94,23 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                             Toast.makeText(getApplicationContext(), result.toString(), Toast.LENGTH_LONG).show();
 
                         }
-                    });
+                    }); // debug toast, no bug here.
                 }
             }
         }.execute();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        recognizer.cancel();
+        recognizer.shutdown();
+    }
+
     private void toastMe(int toastMessage) {
         Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
     }
+
     public void onSamsaaramStopIconClicked(View v) {
 
         //Handle stop recognition here
@@ -107,17 +118,21 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         redImageButton.setVisibility(View.INVISIBLE); // hide the stopper button by showing the starter button
         violetImageButton.setVisibility(View.VISIBLE);
         messageTextView.setText(R.string.start_message);
-
+        recognizer.cancel();
     }
 
     public void onSamsaaramStartIconClicked(View v) {
         //Handle start recognition here
+        recognizer.stop();
         toastMe(R.string.start_toast_message);
         violetImageButton.setVisibility(View.INVISIBLE); //hide the starter button by showing the stopper button
         redImageButton.setVisibility(View.VISIBLE);
         messageTextView.setText(R.string.stop_message);
-        recognizer.startListening("Samsaaram");
+        recognizer.startListening(SAMSAARAM,10000); // there is a bug here, but what the hell is it! o.O
+
+        // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
     }
+
     /*
     ********************************************************************************************************
     IMPLEMENTATION OF CMU SPEECH RECOGNITION LISTENER METHODS
@@ -147,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 
     @Override
     public void onError(Exception e) {
-
     }
 
     @Override
@@ -172,13 +186,13 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
                 .setAcousticModel(new File(assetsDir, "ml-in-acoustic"))
                 .setDictionary(new File(assetsDir, "samsaaram.dic"))
 
-                        // To disable logging of raw audio comment out this call (takes a lot of space on the device)
-                        // .setRawLogDir(assetsDir)
+                // To disable logging of raw audio comment out this call (takes a lot of space on the device)
+                // .setRawLogDir(assetsDir)
 
-                        // Threshold to tune for keyphrase to balance between false alarms and misses
-                        // .setKeywordThreshold(1e-45f)
+                // Threshold to tune for keyphrase to balance between false alarms and misses
+                // .setKeywordThreshold(1e-45f)
 
-                        // Use context-independent phonetic search, context-dependent is too slow for mobile
+                // Use context-independent phonetic search, context-dependent is too slow for mobile
                 .setBoolean("-allphone_ci", true)
                 .getRecognizer();
         recognizer.addListener(this);
@@ -189,6 +203,6 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
 
         // Create language model search
         File languageModel = new File(assetsDir, "samsaaram.arpa");
-        recognizer.addNgramSearch("Malayalam", languageModel);
+        recognizer.addNgramSearch(SAMSAARAM, languageModel);
     }
 }

@@ -1,3 +1,7 @@
-/build
+/build/generated
+/build/intermediates
+/build/tmp
+/build/outputs/logs
+/build/outputs/apk/app-debug-unaligned.apk
 /src/androidTest
 /src/test
