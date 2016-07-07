@@ -10,4 +10,13 @@
     <string name="empty_textView" />
     <string name="failed_init_recognizer">Please enable permission for Microphone</string>
     <string name="setting_decoder">Setting Decoder</string>
+    <string name="action_about">About</string>
+    <string name="action_feedback">Feedback</string>
+    <string name="who_are_we">About the developer</string>
+    <string name="abt_dev_description">An Open-Source Enthusiast who likes to experiment with latest trends in Computer Science.</string>
+    <string name="abt_app">About App</string>
+    <string name="abt_app_description">\"\u0d38\u0d02\u0d38\u0d3e\u0d30\u0d02\" is a speech recognition application for Android and it is based on CMUPocketSphinx Speech Recognition Libraries.</string>
+    <string name="action_contribute">Contribute</string>
+    <string name="like_to_contribute">Like to Contribute?</string>
+    <string name="contribute_descripton">Would you like to contribute to this Open-Source Project?</string>
 </resources>

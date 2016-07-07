@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/content_main"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="imsreenadh.samsaaram.MainActivity"
     tools:showIn="@layout/activity_main">
@@ -17,7 +18,9 @@
         android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:text="@string/start_message"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin" />
 
 
     <!-- RED IMAGE BUTTON -->
@@ -55,7 +58,8 @@
         android:padding="8dp"
         android:text="@string/empty_textView"
         android:textColor="@color/resultText"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/caption_text"
@@ -65,5 +69,6 @@
         android:layout_toEndOf="@+id/result_text"
         android:padding="5dp"
         android:text="@string/empty_textView"
-        android:textColor="@color/captionText" />
+        android:textColor="@color/captionText"
+        android:layout_toRightOf="@+id/result_text" />
 </RelativeLayout>

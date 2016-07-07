@@ -2,14 +2,29 @@ package imsreenadh.samsaaram;
 
 //Android imports
 
+import android.Manifest;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +35,7 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
+import static imsreenadh.samsaaram.R.id.content_main;
 
 // Java imports
 // CMU PocketSphinx based Imports
@@ -35,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     TextView resultTextView;
 
     private SpeechRecognizer recognizer;
+    private boolean permission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Dexter.initialize(this);
         messageTextView = (TextView) findViewById(R.id.message);
         resultTextView = (TextView) findViewById(R.id.result_text);
         violetImageButton = (ImageButton) findViewById(R.id.samsaaramVioletIcon);
@@ -50,52 +68,105 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         // initially this needs to be hidden to maintain proper shadow of button
         redImageButton.setVisibility(View.INVISIBLE);
 
-        /*
-        ********************************************************************************************************
-        IMPLEMENTATION OF ASyncTask to handle intensive Decoder Configuration
-        ******************************************************************************************************
-        */
-        new AsyncTask<Void, Void, Exception>() {
-            @Override
-            protected Exception doInBackground(Void... params) {
-                try {
+        // PERMISSION
 
-                    Assets assets = new Assets(MainActivity.this);
+        Dexter.checkPermissionOnSameThread(new PermissionListener() {
+            @Override public void onPermissionGranted(PermissionGrantedResponse response){
 
-                    File assetDir = assets.syncAssets();
+                /*
+                --------------------------------------- GRANTED ------------------------------------
+                */
 
-                    setupRecognizer(assetDir);
+                permission = true;
 
-                } catch (IOException e) {
-                    return e;
-                }
-                return null;
+                /*
+                ************************************************************************************
+                IMPLEMENTATION OF ASyncTask to handle intensive Decoder Configuration
+                ************************************************************************************
+                */
+                new AsyncTask<Void, Void, Exception>() {
+                    @Override
+                    protected Exception doInBackground(Void... params) {
+                        try {
+
+                            Assets assets = new Assets(MainActivity.this);
+
+                            File assetDir = assets.syncAssets();
+
+                            setupRecognizer(assetDir);
+
+                        } catch (IOException e) {
+                            return e;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(final Exception result) {
+
+                        toaster("DECODER COFIGURED, YOU MAY BEGIN", 100);
+                        // show error (if any)
+                        if (result != null) {
+                            ((TextView) findViewById(R.id.caption_text))
+                                    .setText(R.string.failed_init_recognizer);
+                        } else {
+                            ((TextView) findViewById(R.id.caption_text)).setVisibility(View.INVISIBLE);
+                        }
+                    }
+                }.execute();
             }
 
-            @Override
-            protected void onPostExecute(final Exception result) {
-
-                toaster("DECODER COFIGURED, YOU MAY BEGIN");
-                // show error (if any)
-                if (result != null) {
-                    ((TextView) findViewById(R.id.caption_text))
-                            .setText(R.string.failed_init_recognizer);
-                } else {
-                    ((TextView) findViewById(R.id.caption_text)).setVisibility(View.INVISIBLE);
+            /*
+              --------------------------------------- DENIED ------------------------------------
+            */
+            @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                permission = false;
+                toaster("Please enable permission under App info and Relaunch the app!",2500);
                 }
+
+            @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                /* ... */
+                token.continuePermissionRequest();
             }
-        }.execute();
+        }, Manifest.permission.RECORD_AUDIO);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        recognizer.cancel();
-        recognizer.shutdown();
     }
 
-    private void toaster(String message){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show();
+    // Menu icons are inflated just as they were with actionbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    // Handle Menu clicks
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_about:
+                // User chose the "AboutActivity" item, show the app about UI...
+                startActivity(new Intent(this,AboutActivity.class));
+                return true;
+
+            case R.id.action_feedback:
+                // User chose the "Feedback" item, show the app feedback UI...
+
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    private void toaster(String message, int duration){
+        Toast.makeText(this,message,duration).show();
     }
     public void onSamsaaramStopIconClicked(View v) {
         //Handle stop recognition here
@@ -106,19 +177,21 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
     }
 
     public void onSamsaaramStartIconClicked(View v) {
-        //Handle start recognition here
-        violetImageButton.setVisibility(View.INVISIBLE); //hide the starter button by showing the stopper button
-        redImageButton.setVisibility(View.VISIBLE);
-        messageTextView.setText(R.string.stop_message);
-        if(recognizer.startListening(SAMSAARAM)){
-            toaster("TRUE");// there is a bug here, but what the hell is it! o.O
-        }
-        else {
-            toaster("FALSE");
-        }
 
-        // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
+
+        if (permission) {
+            //Handle start recognition here
+            violetImageButton.setVisibility(View.INVISIBLE); //hide the starter button by showing the stopper button
+            redImageButton.setVisibility(View.VISIBLE);
+            messageTextView.setText(R.string.stop_message);
+                recognizer.startListening(SAMSAARAM);
+                toaster("TRUE", 1000);// there is a bug here, but what the hell is it! o.O
+        } else {
+                toaster("Please grant permission first and relaunch App!", 1000);
+        }
+            // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
     }
+
 
     /*
     ********************************************************************************************************
