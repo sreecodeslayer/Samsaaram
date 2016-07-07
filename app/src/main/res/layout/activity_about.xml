@@ -17,9 +17,11 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_horizontal_margin"
         android:text="@string/abt_app"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -30,7 +32,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/aboutApp"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:text="@string/abt_app_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -45,7 +49,9 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/abtAppDescription"
         android:layout_marginTop="16dp"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:text="@string/who_are_we"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -57,7 +63,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/whoAreWeTextView"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:text="@string/abt_dev_description"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -72,7 +80,9 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/developerDescription"
         android:layout_marginTop="16dp"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:text="@string/like_to_contribute"
         android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -84,8 +94,25 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/likeToContribute"
+        android:paddingEnd="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
         android:paddingStart="@dimen/activity_vertical_margin"
         android:text="@string/contribute_descripton"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/contributeGithub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/contributeDescription"
+        android:paddingEnd="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingStart="@dimen/activity_vertical_margin"
+        android:text="@string/contribute_github"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
 </RelativeLayout>
