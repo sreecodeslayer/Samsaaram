@@ -1,4 +1,5 @@
 <resources>
+    <!-- MAIN ACTIVITY AND GENERAL -->
     <string name="app_name">Samsaaram</string>
     <string name="title_activity_main">\u0d38\u0d02\u0d38\u0d3e\u0d30\u0d02</string>
     <string name="start_message">\u0d2e\u0d32\u0d2f\u0d3e\u0d33\u0d02\u0020\u0d38\u0d02\u0d2d\u0d3e\u0d37\u0d23\u0d02\u0020\u0d24\u0d3f\u0d30\u0d3f\u0d1a\u0d4d\u0d1a\u0d31\u0d3f\u0d2f\u0d32\u0d3f\u0d28\u0d3e\u0d2f\u0d3f\u0020\u0d24\u0d3e\u0d34\u0d46\u0d2f\u0d41\u0d33\u0d4d\u0d33\u0020\u0d07\u0d2e\u0d47\u0d1c\u0d4d\u200c\u0020\u0d1f\u0d1a\u0d4d\u0d1a\u0d4d\u200c\u0020\u0d1a\u0d46\u0d2f\u0d4d\u0d2f\u0d41\u0d15\u002e</string>
@@ -10,13 +11,22 @@
     <string name="empty_textView" />
     <string name="failed_init_recognizer">Please enable permission for Microphone</string>
     <string name="setting_decoder">Setting Decoder</string>
+
+    <!-- ABOUT ACTIVITY SPECIFIC -->
     <string name="action_about">About</string>
-    <string name="action_feedback">Feedback</string>
     <string name="who_are_we">About the developer</string>
     <string name="abt_dev_description">An Open-Source Enthusiast who likes to experiment with latest trends in Computer Science.</string>
     <string name="abt_app">About App</string>
-    <string name="abt_app_description">\"\u0d38\u0d02\u0d38\u0d3e\u0d30\u0d02\" is a speech recognition application for Android and it is based on CMUPocketSphinx Speech Recognition Libraries.</string>
+    <string name="abt_app_description">\"\u0d38\u0d02\u0d38\u0d3e\u0d30\u0d02\" is a speech recognition application for Android and it is based on CMUPocketSphinx Speech Recognition Libraries. The Language model and Acoustic model is currently limitted to a small vocabulary. Feel free to contribute.</string>
     <string name="action_contribute">Contribute</string>
     <string name="like_to_contribute">Like to Contribute?</string>
     <string name="contribute_descripton">Would you like to contribute to this Open-Source Project?</string>
+    <string name="contribute_github">Head over to my <a href="https://www.github.com/sreecodeslayer/samsaaram">Github</a> profile to know more about contribution and source.</string>
+
+    <!-- FEEDBACK ACITIVITY SPECIFIC -->
+    <string name="action_feedback">Feedback</string>
+    <string name="provide_feedback">Feel like suggesting?</string>
+    <string name="e_mail">E-mail Address</string>
+    <string name="suggestion" >Suggestion and Feedback</string>
+    <string name="send_feedback">Send Feedback</string>
 </resources>

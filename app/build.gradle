@@ -29,6 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:design:24.0.0'
     compile 'com.karumi:dexter:2.2.2'
+    compile 'com.github.rey5137:material:1.2.4'
     compile files('libs/pocketsphinx-android-5prealpha-nolib.jar')
 }
 

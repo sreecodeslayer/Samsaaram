@@ -6,13 +6,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +20,7 @@ import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.DialogOnDeniedPermissionListener;
 import com.karumi.dexter.listener.single.PermissionListener;
-import com.karumi.dexter.listener.single.SnackbarOnDeniedPermissionListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,7 +31,6 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
-import static imsreenadh.samsaaram.R.id.content_main;
 
 // Java imports
 // CMU PocketSphinx based Imports
@@ -71,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         // PERMISSION
 
         Dexter.checkPermissionOnSameThread(new PermissionListener() {
-            @Override public void onPermissionGranted(PermissionGrantedResponse response){
+            @Override
+            public void onPermissionGranted(PermissionGrantedResponse response) {
 
                 /*
                 --------------------------------------- GRANTED ------------------------------------
@@ -119,12 +115,14 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             /*
               --------------------------------------- DENIED ------------------------------------
             */
-            @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse response) {
                 permission = false;
-                toaster("Please enable permission under App info and Relaunch the app!",2500);
-                }
+                toaster("Please enable permission under App info and Relaunch the app!", 2500);
+            }
 
-            @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
                 /* ... */
                 token.continuePermissionRequest();
             }
@@ -150,12 +148,12 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         switch (item.getItemId()) {
             case R.id.action_about:
                 // User chose the "AboutActivity" item, show the app about UI...
-                startActivity(new Intent(this,AboutActivity.class));
+                startActivity(new Intent(this, AboutActivity.class));
                 return true;
 
             case R.id.action_feedback:
                 // User chose the "Feedback" item, show the app feedback UI...
-
+                startActivity(new Intent(this, FeedbackActivity.class));
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
@@ -165,9 +163,10 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
         }
     }
 
-    private void toaster(String message, int duration){
-        Toast.makeText(this,message,duration).show();
+    private void toaster(String message, int duration) {
+        Toast.makeText(this, message, duration).show();
     }
+
     public void onSamsaaramStopIconClicked(View v) {
         //Handle stop recognition here
         redImageButton.setVisibility(View.INVISIBLE); // hide the stopper button by showing the starter button
@@ -184,12 +183,12 @@ public class MainActivity extends AppCompatActivity implements RecognitionListen
             violetImageButton.setVisibility(View.INVISIBLE); //hide the starter button by showing the stopper button
             redImageButton.setVisibility(View.VISIBLE);
             messageTextView.setText(R.string.stop_message);
-                recognizer.startListening(SAMSAARAM);
-                toaster("TRUE", 1000);// there is a bug here, but what the hell is it! o.O
+            recognizer.startListening(SAMSAARAM);
+            toaster("TRUE", 1000);// there is a bug here, but what the hell is it! o.O
         } else {
-                toaster("Please grant permission first and relaunch App!", 1000);
+            toaster("Please grant permission first and relaunch App!", 1000);
         }
-            // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
+        // update on the bug : CASE SENSITIVE goto line 31 ( LOL )
     }
 
 
